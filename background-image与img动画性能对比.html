@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, target-densitydpi=device-dpi">
+    <style>
+        html, body {
+            height: 100%;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            overflow: hidden;
+            margin: 0;
+        }
+        .wrap{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .screen{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            -webkit-backface-visibility: hidden;
+            -webkit-perspective: 1000;
+            position: relative;
+        }
+        .tags{
+            width: 100%;
+            display: flex;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+        }
+        .tag{
+            flex: 1;
+            line-height: 2;
+            color: #fff;
+            text-align: center;
+            background-color: rgba(0,0,0,.3);
+        }
+        .tag.active{
+            background-color: #4ca4ff;
+        }
+        .screen > div,
+        .screen > img{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: rotate 3s linear infinite;
+            -webkit-animation: rotate 3s linear infinite;
+        }
+        .screen > div{
+            background-size: cover;
+        }
+        .screen1 > div{
+            background-image: url(./img/bj.jpg);
+        }
+        .screen2 > div{
+            background-image: url(./img/cd.jpg);
+        }
+        .screen3 > div{
+            background-image: url(./img/sz.jpg);
+        }
+        
+        @-webkit-keyframes rotate {
+          from {
+            transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+          }
+        }
+        @keyframes rotate {
+          from {
+            transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+          }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="tags">
+        <div id="background" class="tag active">background场景</div>
+        <div id="img" class="tag">img场景</div>
+    </div>
+    <div class="wrap">
+        <section class="screen screen1">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </section>
+        <section class="screen screen2">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </section>
+        <section class="screen screen3">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </section>
+    </div>
+    <script src="./js/wxmoment.min.js"></script>
+    <script>
+        var pageSlider = new WxMoment.PageSlider({
+            pages: $('.screen')
+        });
+
+        $(".tag").click(function () {
+            if( $(this).hasClass("active") )
+                return;
+            
+            var arr = ["bj", "cd", "sz"];
+            if( $(this).attr("id") == "background" ){
+                $(".screen").forEach(function(item, index){
+                    var html = $(item).html();
+                    console.log(html)
+                    html = html.replace(/<img.+?>/g, `<div></div>`);
+                    $(item).html(html);
+                })
+            }else{
+                $(".screen").forEach(function(item, index){
+                    var html = $(item).html();
+                    html = html.replace(/<div><\/div>/g, `<img src='./img/${arr[index]}.jpg' />`);
+                    console.log(html)
+                    $(item).html(html);
+                })
+            }
+            $(this).addClass("active").siblings().removeClass("active");
+        })
+    </script>
+</body>
+<html>
