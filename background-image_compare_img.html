@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, target-densitydpi=device-dpi">
     <style>
         html, body {
@@ -27,8 +28,13 @@
             width: 100%;
             display: flex;
             position: fixed;
-            top: 0;
             z-index: 10;
+        }
+        .scene{
+            top: 0;
+        }
+        .nums{
+            bottom: 0;
         }
         .tag{
             flex: 1;
@@ -85,12 +91,19 @@
     </style>
 </head>
 <body>
-    <div class="tags">
+    <nav class="tags scene">
         <div id="background" class="tag active">background场景</div>
         <div id="img" class="tag">img场景</div>
-    </div>
+    </nav>
+    <nav class="tags nums">
+        <div class="tag active" id="10">10</div>
+        <div class="tag" id="20">20</div>
+        <div class="tag" id="50">50</div>
+        <div class="tag" id="100">100</div>
+    </nav>
     <div class="wrap">
         <section class="screen screen1">
+            <div></div>
             <div></div>
             <div></div>
             <div></div>
@@ -111,8 +124,10 @@
             <div></div>
             <div></div>
             <div></div>
+            <div></div>
         </section>
         <section class="screen screen3">
+            <div></div>
             <div></div>
             <div></div>
             <div></div>
@@ -130,7 +145,7 @@
             pages: $('.screen')
         });
 
-        $(".tag").click(function () {
+        $(".scene .tag").click(function () {
             if( $(this).hasClass("active") )
                 return;
             
@@ -138,7 +153,6 @@
             if( $(this).attr("id") == "background" ){
                 $(".screen").forEach(function(item, index){
                     var html = $(item).html();
-                    console.log(html)
                     html = html.replace(/<img.+?>/g, `<div></div>`);
                     $(item).html(html);
                 })
@@ -146,10 +160,35 @@
                 $(".screen").forEach(function(item, index){
                     var html = $(item).html();
                     html = html.replace(/<div><\/div>/g, `<img src='./img/${arr[index]}.jpg' />`);
-                    console.log(html)
                     $(item).html(html);
                 })
             }
+            $(this).addClass("active").siblings().removeClass("active");
+        })
+
+        $(".nums .tag").click(function(){
+            if( $(this).hasClass("active") )
+                return;
+
+            var num = Number($(this).attr("id"));
+            $(".screen").forEach(function(item, index){
+                var size = $(item).children().size();
+                if( size > num ){
+                    for( var i = num; i < size; i++ ){
+                        $(item).children().eq(num).remove();
+                    }
+                }else{
+                    var copy = $(item).children().eq(0).clone();
+                    for( var i = size; i < num; i++ ){
+
+                        $(item).append(copy.clone());
+                    }
+                }
+                var html = $(item).html();
+                html = html.replace(/<img.+?>/g, `<div></div>`);
+                $(item).html(html);
+            })
+
             $(this).addClass("active").siblings().removeClass("active");
         })
     </script>
